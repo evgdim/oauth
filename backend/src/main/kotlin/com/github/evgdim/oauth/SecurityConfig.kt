@@ -29,16 +29,16 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+//            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//        .and()
             .cors()
         .and()
             .authorizeRequests()
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()
-                    .authorizationEndpoint()
-                        .authorizationRequestRepository(HttpCookieOAuth2AuthorizationRequestRepository())
+//                    .authorizationEndpoint()
+//                        .authorizationRequestRepository(HttpCookieOAuth2AuthorizationRequestRepository())
     }
 
     override fun configure(web: WebSecurity?) {

@@ -1,3 +1,4 @@
+import { HttpService } from './../core/http/http.service';
 import { Component, OnInit } from '@angular/core';
 
 import { environment } from '@env/environment';
@@ -9,8 +10,13 @@ import { environment } from '@env/environment';
 })
 export class AboutComponent implements OnInit {
   version: string | null = environment.version;
+  http: HttpService;
 
-  constructor() {}
+  constructor(http: HttpService) {
+    this.http = http;
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.http.get("/user").subscribe(resp => console.log(resp))
+  }
 }

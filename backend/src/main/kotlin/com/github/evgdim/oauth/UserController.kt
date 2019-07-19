@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 class UserController(val oauthClientService: OAuth2AuthorizedClientService) {
     @GetMapping
     fun user(principal: Principal) : Principal {
