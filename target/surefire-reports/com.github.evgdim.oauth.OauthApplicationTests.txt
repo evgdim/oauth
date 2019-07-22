@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.github.evgdim.oauth.OauthApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.873 s - in com.github.evgdim.oauth.OauthApplicationTests
