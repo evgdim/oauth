@@ -1,9 +1,6 @@
 package com.github.evgdim.oauth
 
-import com.github.evgdim.oauth.security.CustomOidcUserService
-import com.github.evgdim.oauth.security.CustomUserService
-import com.github.evgdim.oauth.security.HttpCookieOAuth2AuthorizationRequestRepository
-import com.github.evgdim.oauth.security.OAuth2AuthenticationFailureHandler
+import com.github.evgdim.oauth.security.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -39,7 +36,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .csrf()
                 .disable()
         .authorizeRequests()
-            .mvcMatchers("/login/oauth2/code/google")
+            .mvcMatchers("/login/oauth2/code/google", "/oauth2/authorization/google")
                 .permitAll()
             .anyRequest()
                 .authenticated()
@@ -52,7 +49,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .oidcUserService(CustomOidcUserService())
                 .userService(CustomUserService())
             .and()
-            .successHandler(SimpleUrlAuthenticationSuccessHandler())
+            .successHandler(OAuth2AuthenticationSuccessHandler())
             .failureHandler(OAuth2AuthenticationFailureHandler())
     }
 

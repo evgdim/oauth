@@ -1,5 +1,7 @@
 package com.github.evgdim.oauth.security
 
+import com.github.evgdim.oauth.commons.deleteCookies
+import com.github.evgdim.oauth.commons.fetchCookie
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.util.SerializationUtils
@@ -40,7 +42,7 @@ class HttpCookieOAuth2AuthorizationRequestRepository() : AuthorizationRequestRep
         cookie.setMaxAge(cookieExpirySecs)
         response.addCookie(cookie)
 
-        val lemonRedirectUri = request.getParameter(LEMON_REDIRECT_URI_COOKIE_PARAM_NAME)
+        val lemonRedirectUri = "http://localhost:8080/api/user"//request.getParameter(LEMON_REDIRECT_URI_COOKIE_PARAM_NAME)
         if (!StringUtils.isEmpty(lemonRedirectUri)) {
             cookie = Cookie(LEMON_REDIRECT_URI_COOKIE_PARAM_NAME, lemonRedirectUri)
             cookie.setPath("/")
@@ -66,36 +68,8 @@ class HttpCookieOAuth2AuthorizationRequestRepository() : AuthorizationRequestRep
 
     companion object {
 
-        private val AUTHORIZATION_REQUEST_COOKIE_NAME = "lemon_oauth2_authorization_request"
+        val AUTHORIZATION_REQUEST_COOKIE_NAME = "lemon_oauth2_authorization_request"
         val LEMON_REDIRECT_URI_COOKIE_PARAM_NAME = "lemon_redirect_uri"
 
-        /**
-         * Utility for deleting related cookies
-         */
-        fun deleteCookies(request: HttpServletRequest, response: HttpServletResponse) {
-
-            val cookies = request.cookies
-
-            if (cookies != null && cookies.size > 0)
-                for (i in cookies.indices)
-                    if (cookies[i].name.equals(AUTHORIZATION_REQUEST_COOKIE_NAME) || cookies[i].name.equals(LEMON_REDIRECT_URI_COOKIE_PARAM_NAME)) {
-
-                        cookies[i].value = ""
-                        cookies[i].path = "/"
-                        cookies[i].maxAge = 0
-                        response.addCookie(cookies[i])
-                    }
-        }
-
-        fun fetchCookie(request: HttpServletRequest, authorizationRequestCookieName: String): Cookie? {
-            val cookies = request.cookies
-
-            if (cookies != null && cookies.size > 0)
-                for (i in cookies.indices)
-                    if (cookies[i].name == authorizationRequestCookieName)
-                        return cookies[i]
-
-            return null
-        }
     }
 }
