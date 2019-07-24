@@ -1,6 +1,5 @@
 package com.github.evgdim.oauth
 
-import com.github.evgdim.oauth.security.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -10,18 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import java.util.Base64.getUrlDecoder
-import org.springframework.util.SerializationUtils
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
-import java.util.Base64.getUrlEncoder
-import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.HttpServletRequest
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository
-import org.springframework.util.StringUtils
-import java.util.*
-import javax.servlet.http.Cookie
-import org.apache.tomcat.jni.Lock.name
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
+import org.apache.catalina.filters.RequestDumperFilter
+
 
 
 @Configuration
@@ -36,21 +25,9 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .csrf()
                 .disable()
         .authorizeRequests()
-            .mvcMatchers("/login/oauth2/code/google", "/oauth2/authorization/google")
-                .permitAll()
-            .anyRequest()
-                .authenticated()
-        .and()
-            .oauth2Login()
-                .authorizationEndpoint()
-                    .authorizationRequestRepository(HttpCookieOAuth2AuthorizationRequestRepository())
-            .and()
-            .userInfoEndpoint()
-                .oidcUserService(CustomOidcUserService())
-                .userService(CustomUserService())
-            .and()
-            .successHandler(OAuth2AuthenticationSuccessHandler())
-            .failureHandler(OAuth2AuthenticationFailureHandler())
+            .anyRequest().authenticated()
+                //.access("#oauth2.hasScope('read')");
+
     }
 
     override fun configure(web: WebSecurity?) {
@@ -67,5 +44,10 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
+    }
+
+    @Bean
+    fun requestDumperFilter(): RequestDumperFilter {
+        return RequestDumperFilter()
     }
 }
