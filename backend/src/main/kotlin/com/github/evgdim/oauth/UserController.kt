@@ -9,7 +9,7 @@ import java.security.Principal
 @RequestMapping("/user")
 class UserController() {
     @GetMapping
-    fun user(principal: Principal) : Principal {
+    fun user(principal: Principal?) : Principal? {
         return principal
     }
 
