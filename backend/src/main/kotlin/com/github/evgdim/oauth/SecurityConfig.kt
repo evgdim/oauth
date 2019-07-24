@@ -1,36 +1,24 @@
 package com.github.evgdim.oauth
 
+import com.github.evgdim.oauth.properties.OauthProperties
 import com.github.evgdim.oauth.security.GoogleRemoteTokenService
-import jdk.nashorn.internal.parser.Token
+import org.apache.catalina.filters.RequestDumperFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.apache.catalina.filters.RequestDumperFilter
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.oauth2.common.OAuth2AccessToken
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer
-import org.springframework.security.oauth2.provider.OAuth2Authentication
-import org.springframework.security.oauth2.provider.token.TokenStore
-import org.springframework.security.oauth2.provider.token.store.jwk.JwkTokenStore
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices
-
-
-
-
-
 
 @Configuration
-class SecurityConfig : WebSecurityConfigurerAdapter() {
+class SecurityConfig(val oauthProperties: OauthProperties) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
@@ -55,7 +43,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun tokenService(): ResourceServerTokenServices {
-        return GoogleRemoteTokenService("https://oauth2.googleapis.com/tokeninfo",DefaultAccessTokenConverter())
+        return GoogleRemoteTokenService(oauthProperties.checkTokenUrl,DefaultAccessTokenConverter())
     }
 
     @Bean

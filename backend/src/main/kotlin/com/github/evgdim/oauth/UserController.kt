@@ -13,15 +13,4 @@ class UserController() {
         return principal
     }
 
-//    @GetMapping("/token")
-//    fun token() : OAuth2AuthorizedClient {
-//        val authentication = SecurityContextHolder
-//                .getContext()
-//                .authentication
-//
-//        val oauthToken = authentication as OAuth2AuthenticationToken
-//
-//        val authClient = oauthClientService.loadAuthorizedClient<OAuth2AuthorizedClient>(oauthToken.authorizedClientRegistrationId, oauthToken.name)
-//        return authClient
-//    }
 }

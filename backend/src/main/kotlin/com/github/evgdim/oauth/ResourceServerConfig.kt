@@ -1,5 +1,6 @@
 package com.github.evgdim.oauth
 
+import com.github.evgdim.oauth.properties.OauthProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -9,9 +10,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 @EnableResourceServer
 @Configuration
-class ResourceServerConfig : ResourceServerConfigurerAdapter() {
+class ResourceServerConfig(val oauthProperties: OauthProperties) : ResourceServerConfigurerAdapter() {
+
     override fun configure(resources: ResourceServerSecurityConfigurer?) {
-        resources?.resourceId("113294925702-gqfvecvk5b4ndual6brpkc1hircvjhu5.apps.googleusercontent.com")
+        resources?.resourceId(oauthProperties.clientKey)
     }
 
     override fun configure(http: HttpSecurity?) {
