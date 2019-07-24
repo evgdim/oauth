@@ -4,13 +4,17 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
+import { SocialLoginModule, AuthServiceConfig, LoginOpt } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
+
+const googleLoginOptions: LoginOpt = {
+  scope: 'profile email https://www.googleapis.com/auth/compute'
+};
 
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("113294925702-gqfvecvk5b4ndual6brpkc1hircvjhu5.apps.googleusercontent.com")
+    provider: new GoogleLoginProvider("113294925702-gqfvecvk5b4ndual6brpkc1hircvjhu5.apps.googleusercontent.com", googleLoginOptions)
   }
 ]);
 
