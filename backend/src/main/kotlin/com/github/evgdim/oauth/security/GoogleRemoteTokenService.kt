@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.security.oauth2.common.OAuth2AccessToken
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter
@@ -44,7 +45,7 @@ class GoogleRemoteTokenService : ResourceServerTokenServices {
             }
             throw InvalidTokenException(accessToken)
         }
-        map.computeIfAbsent("user_name", {map.get("email") ?: "Emain not available" as Object}) //TODO thow exception
+        map.computeIfAbsent("user_name", { key -> map.get("email") ?: throw InvalidClientException("claims does not contain email")})
         return accessTokenConverter.extractAuthentication(map)
     }
 
