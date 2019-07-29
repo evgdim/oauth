@@ -16,6 +16,9 @@ import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
 import java.io.IOException
 
+@Deprecated("Call Google to verify the token. " +
+        "Usage: override WebSecurityConfigurerAdapter::authenticationManagerBean() " +
+        "by creating OAuth2AuthenticationManager and set a new instance of GoogleRemoteTokenService to the property tokenServices")
 class GoogleRemoteTokenService : ResourceServerTokenServices {
     val logger = LoggerFactory.getLogger(GoogleRemoteTokenService::class.java)
 
